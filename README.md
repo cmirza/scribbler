@@ -1,4 +1,4 @@
-<img src="./logo.png" alt="crage" style="width:200px;"/>
+<img src="./logo.png" alt="crage" style="width:175px;"/>
 
 # Scribbler
 
