@@ -1,42 +1,31 @@
-import express, { Router } from "express";
-import fs from "fs";
-import path from "path";
-import MarkdownIt from "markdown-it";
-import { renderPost, RenderOptions } from "./utils/renderPost";
-import { Cache } from "./utils/cache";
+import express, { Router } from 'express';
+import { renderPost, RenderOptions } from './utils/renderPost';
+import { savePostToCache, readPostFromCache } from './utils/cache';
 
 const router = Router();
-const md = new MarkdownIt();
-
-const cache = new Cache();
-
-const header = "<header>Welcome to Scribbler</header>";
-const footer = "<footer>Powered by Scribbler</footer>";
-
 const renderOptions: RenderOptions = {
-  header: header,
-  footer: footer,
+  header: '<header>Header content</header>',
+  footer: '<footer>Footer content</footer>',
 };
 
 const routes = (): Router => {
-  router.get("/", (req, res) => {
-    res.send("Hello World");
+  router.get('/', (req, res) => {
+    res.send('Hello World');
   });
 
-  router.get("/post/:slug", async (req, res) => {
+  router.get('/post/:slug', async (req, res) => {
     const slug = req.params.slug;
 
-    if (cache.has(slug)) {
-      console.log(`Serving post "${slug}" from cache.`);
-      res.send(cache.get(slug));
+    const cachedPost = await readPostFromCache(slug);
+    if (cachedPost !== null) {
+      res.send(cachedPost);
     } else {
       const renderedHtml = await renderPost(slug, renderOptions);
       if (renderedHtml !== null) {
-        console.log(`Rendering and caching post "${slug}".`);
-        cache.set(slug, renderedHtml);
+        await savePostToCache(slug, renderedHtml);
         res.send(renderedHtml);
       } else {
-        res.status(404).send("Not Found");
+        res.status(404).send('Not Found');
       }
     }
   });

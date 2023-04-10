@@ -11,7 +11,7 @@ export interface RenderOptions {
 };
 
 export async function renderPost(slug: string, options: RenderOptions): Promise<string | null> {
-    const postPath = path.join(__dirname, '..', 'posts', `${slug}.md`);
+    const postPath = path.join(__dirname, '..', '..', 'posts', `${slug}.md`);
 
     if (!(await fs.pathExists(postPath))) {
         return null;
@@ -21,9 +21,7 @@ export async function renderPost(slug: string, options: RenderOptions): Promise<
     const html = markdown.render(postContent);
 
     const template = handlebars.compile(`
-        {{{header}}}
-        {{{content}}}
-        {{{footer}}}
+        {{{header}}}{{{content}}}{{{footer}}}
     `);
 
     const renderedHtml = template({ header: options.header, content: html, footer: options.footer });
