@@ -1,3 +1,12 @@
+---
+title: "Sample Blog Post"
+date: 2023-04-07
+tags:
+  - sample
+  - blog
+  - post
+---
+
 # Sample Blog Post
 
 Welcome to Scribbler!

@@ -1,3 +1,4 @@
+import matter from 'gray-matter';
 import fs from 'fs-extra';
 import path from 'path';
 import MarkdownIt from 'markdown-it';
@@ -17,8 +18,9 @@ export async function renderPost(slug: string, options: RenderOptions): Promise<
         return null;
     }
 
-    const postContent = await fs.readFile(postPath, 'utf-8');
-    const html = markdown.render(postContent);
+    const rawPostContent = await fs.readFile(postPath, 'utf-8');
+    const { data: metadata, content } = matter(rawPostContent);
+    const html = markdown.render(content);
 
     const template = handlebars.compile(`
         {{{header}}}{{{content}}}{{{footer}}}

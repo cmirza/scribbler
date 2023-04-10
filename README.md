@@ -16,3 +16,8 @@ Scribbler is a hybrid static and dynamic blogging platform that generates and se
 - Implement in-memory caching of rendered HTML
 - Implement disk caching of rendered HTML
 - Added basic logging to console
+
+#### April 10, 2023
+
+- Added reading of post metadata from frontmatter block in Markdown file
+- Created an index page to list all posts
