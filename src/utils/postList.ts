@@ -1,6 +1,7 @@
 import fs from 'fs-extra';
 import path from 'path';
 import matter from 'gray-matter';
+import slugify from 'slugify';
 
 export interface PostMetadata {
     title: string;
@@ -19,13 +20,17 @@ export async function getPostList(): Promise<PostMetadata[]> {
         const filePath = path.join(postsDir, file);
         const fileContent = await fs.readFile(filePath, 'utf-8');
         const { data } = matter(fileContent);
+        if (data.title) {
+            postList.push({
+                title: data.title,
+                date: data.date,
+                excerpt: data.excerpt,
+                slug: slugify(data.title, { lower: true, strict: true })
+            });
+        } else {
+          console.log(`Skipping empty or invalid file: ${filePath}`)
+        }
 
-        postList.push({
-            title: data.title,
-            date: data.date,
-            excerpt: data.excerpt,
-            slug: file.replace(/\.md$/, '')
-        });
     }
 
     postList.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());

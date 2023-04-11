@@ -21,3 +21,5 @@ Scribbler is a hybrid static and dynamic blogging platform that generates and se
 
 - Added reading of post metadata from frontmatter block in Markdown file
 - Created an index page to list all posts
+- Added post slug generation for URL friendly posts identifiers
+- Added cache invalidation when a post is added or updated
